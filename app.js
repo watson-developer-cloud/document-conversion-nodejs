@@ -51,7 +51,7 @@ app.post('/files', function(req, res, next) {
   form.on('part', function(part) {
     console.log('filename: ', part.filename);
     part.path = part.path || part.filename;
-    document_conversion.upload({file: part}, function (err, result) {
+    document_conversion.uploadDocument({file: part}, function (err, result) {
       if (err) {
         return res.status(err.code || 500).send(err);
       }
