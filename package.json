@@ -1,0 +1,38 @@
+{
+  "name": "document-conversion-demo",
+  "version": "0.1.0",
+  "description": "A sample nodejs app for Bluemix that use the Document Conversion service",
+  "engines": {
+    "node": ">=0.10.38"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/watson-developer-cloud/document-conversion-nodejs.git"
+  },
+  "author": "IBM Corp.",
+  "contributors": [{
+    "name": "James Zhang",
+    "email": "jzhang300@us.ibm.com"
+  }, {
+    "name": "Eva Xiaohui Luo",
+    "email": "evaluo_xhl@us.ibm.com"
+  }, {
+    "name": "German Attanasio Ruiz",
+    "email": "germanatt@us.ibm.com"
+  }],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/watson-developer-cloud/document-conversion-nodejs/issues"
+  },
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "body-parser": "~1.13.2",
+    "errorhandler": "~1.4.1",
+    "express": "~4.13.1",
+    "multiparty": "~4.1.2",
+    "serve-favicon": "~2.3.0",
+    "watson-developer-cloud": "~0.10.1"
+  }
+}
