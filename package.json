@@ -37,6 +37,6 @@
     "express": "~4.13.1",
     "multiparty": "~4.1.2",
     "serve-favicon": "~2.3.0",
-    "watson-developer-cloud": "~0.10.1"
+    "watson-developer-cloud": "~0.10.6"
   }
 }
