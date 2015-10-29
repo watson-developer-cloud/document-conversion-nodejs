@@ -25,9 +25,16 @@ $(document).ready(function() {
     dataType: 'json',
     dropZone: $('.dropzone'),
     acceptFileTypes: /(\.|\/)(pdf|doc|docx|html)$/i,
-    maxFileSize: 1024000, // 1 MB
     add: function(e, data) {
       if (data.files && data.files[0]) {
+        // check file size
+        if(data.files[0]['size'] > 1024000) {
+          showError('The file size exceeds the limit allowed. The maximum file size is 1 MB.');
+          return;
+        } else {
+          hideError();
+        }
+
         $('.upload--file-chooser-name').html(data.files[0].name);
         $('._content--choose-output-format.active').removeClass('active');
         $('._content--output.active').removeClass('active');
@@ -71,7 +78,8 @@ $(document).ready(function() {
                 var display_html = '<pre class="code--input-html-pre language-markup"><code class="base--code language-markup code--input-html-code"></code></pre>';
                 $('#display_input_doc').html(display_html);
                 $('.code--input-html-code').text(data);
-              }
+              },
+              error: _error
             });
 
             $('.sample--list-item-tab.active').removeClass('active');
@@ -92,13 +100,9 @@ $(document).ready(function() {
   });
 
   function _error(xhr) {
-    $('.loading').hide();
-    $('.error').show();
     var response = JSON.parse(xhr.responseText);
-    console.log(response.error.error);
-
-    if (response.error.error === 500) {
-      $('.error h4').text('The file is not supported, try with another file.');
+    if (response.error) {
+      showError(response.error);
     }
   }
 
@@ -124,7 +128,8 @@ $(document).ready(function() {
         }
         $('.code--output-code').text(data);
         $('.download--output-icon').attr('href', '/api/convert?' + params + '&download=true');
-      }
+      },
+      error: _error
     });
 
     $('._content--output.active').removeClass('active');
@@ -148,6 +153,7 @@ $(document).ready(function() {
 });
 
 function convert_sample_html() {
+  hideError();
   id = 'sampleHTML.html';
   clear_file_upload();
   file_extension = 'html';
@@ -177,6 +183,7 @@ function convert_sample_html() {
 }
 
 function convert_sample_docx() {
+  hideError();
   id = 'sampleWORD.docx';
   clear_file_upload();
   file_extension = 'docx';
@@ -201,6 +208,7 @@ function convert_sample_docx() {
 }
 
 function convert_sample_pdf() {
+  hideError();
   id = 'samplePDF.pdf';
   clear_file_upload();
   file_extension = 'pdf';
@@ -226,7 +234,16 @@ function convert_sample_pdf() {
 
 }
 
+function showError(message) {
+  $('.error').text(message);
+  $('.error').show();
+}
+
+function hideError(){
+  $('.error').hide();
+}
 function clear_file_upload() {
+  hideError();
   $('#input-chooser-input').val('');
   $('.upload--file-chooser-name').html('');
 }

@@ -88,7 +88,7 @@ app.get('/api/convert', function(req, res, next) {
 
   document_conversion.convert(params, function(err, data) {
     if (err) {
-      next(err);
+      return next(err);
     }
     var type = types[req.query.conversion_target];
     res.type(type);
