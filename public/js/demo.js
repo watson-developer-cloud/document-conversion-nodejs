@@ -25,7 +25,7 @@ $(document).ready(function() {
     dataType: 'json',
     dropZone: $('.dropzone'),
     acceptFileTypes: /(\.|\/)(pdf|doc|docx|html)$/i,
-    maxFileSize: 512000, // 512 Kilobytes
+    maxFileSize: 1024000, // 1 MB
     add: function(e, data) {
       if (data.files && data.files[0]) {
         $('.upload--file-chooser-name').html(data.files[0].name);
@@ -35,9 +35,9 @@ $(document).ready(function() {
 
         data.submit().complete(function(result) {
           id = result.responseJSON.id;
-          file_extension = result.responseJSON.filename.split('.').pop();
+          file_extension = result.responseJSON.id.split('.').pop();
 
-          if (file_extension == 'pdf') {
+          if (file_extension === 'pdf') {
             var display_pdf = '<div class="file-display--input-pdf-container base--textarea">' +
             '<object class="file-display--input-pdf-object" data="/files/' + id + '" type="application/pdf">' +
             '<embed class="file-display--input-pdf-embed" src="/files/' + id + '" type="application/pdf">' + '</object>' + '</div>';
@@ -63,7 +63,7 @@ $(document).ready(function() {
             $('.code--output-code').empty();
           }
 
-          if (file_extension === 'html' || file_extension == 'htm') {
+          if (file_extension === 'html' || file_extension === 'htm') {
             $.ajax({
               url: '/files/' + id,
               dataType: 'html',
@@ -81,7 +81,7 @@ $(document).ready(function() {
             $('.code--output-code').empty();
           }
 
-          $('.download--input-icon').attr('href', '/files/' + id + '?download=true&filename=' + id + '.' + file_extension);
+          $('.download--input-icon').attr('href', '/files/' + id + '?download=true&filename=' + id);
           var top = document.getElementById('upload-your-document').offsetTop;
           window.scrollTo(0, top);
 
@@ -97,7 +97,7 @@ $(document).ready(function() {
     var response = JSON.parse(xhr.responseText);
     console.log(response.error.error);
 
-    if (response.error.error == 500) {
+    if (response.error.error === 500) {
       $('.error h4').text('The file is not supported, try with another file.');
     }
   }
@@ -111,14 +111,19 @@ $(document).ready(function() {
     else
       $('.description--answer-unit.active').removeClass('active');
 
+    var params = $.param({
+      document_id: id,
+      conversion_target: output_format
+    });
+
     $.ajax({
-      url: '/convert_document/' + id + '/' + output_format,
+      url: '/api/convert?' + params,
       success: function(data) {
         if (output_type === 'json') {
           data = JSON.stringify(data, null, 2);
         }
         $('.code--output-code').text(data);
-        $('.download--output-icon').attr('href', '/convert_document/' + id + '/' + output_format + '?download=true&filename=output.' + output_type);
+        $('.download--output-icon').attr('href', '/api/convert?' + params + '&download=true');
       }
     });
 
@@ -143,16 +148,14 @@ $(document).ready(function() {
 });
 
 function convert_sample_html() {
-  id = '1e163c3c-fa7e-49a0-8772-3f243d5f90b9';
+  id = 'sampleHTML.html';
   clear_file_upload();
-
   file_extension = 'html';
-
-  $('.download--input-icon').attr('href', '/files/' + id + '?download=true&filename=' + id + '.' + file_extension);
+  $('.download--input-icon').attr('href', '/files/' + id + '?download=true');
 
   $.ajax({
     url: '/files/' + id,
-    dataType: 'html',
+    dataType: file_extension,
     success: function(data) {
       var display_html = '<pre class="code--pre language-markup"><code class="base--code language-markup code--input-html-code"></code></pre>';
       $('#display_input_doc').html(display_html);
@@ -174,12 +177,10 @@ function convert_sample_html() {
 }
 
 function convert_sample_docx() {
-  id = '0e864008-ac29-4b40-b276-bf447cd9c9ed';
+  id = 'sampleWORD.docx';
   clear_file_upload();
-
   file_extension = 'docx';
-
-  $('.download--input-icon').attr('href', '/files/' + id + '?download=true&filename=' + id + '.' + file_extension);
+  $('.download--input-icon').attr('href', '/files/' + id + '?download=true');
 
   var display_word = '<iframe class="file-display--word-file" src=""></iframe>';
   $('#display_input_doc').html(display_word);
@@ -200,12 +201,11 @@ function convert_sample_docx() {
 }
 
 function convert_sample_pdf() {
-  id = '332d9672-e615-4736-ad85-fe31f502994b';
+  id = 'samplePDF.pdf';
   clear_file_upload();
-
   file_extension = 'pdf';
 
-  $('.download--input-icon').attr('href', '/files/' + id + '?download=true&filename=' + id + '.' + file_extension);
+  $('.download--input-icon').attr('href', '/files/' + id + '?download=true');
 
   var display_pdf = '<div class="file-display--input-pdf-container base--textarea">' +
   '<object class="file-display--input-pdf-object" data="/files/' + id + '" type="application/pdf">' +

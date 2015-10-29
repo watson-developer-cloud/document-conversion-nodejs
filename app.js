@@ -16,12 +16,12 @@
 
 'use strict';
 
-var express  = require('express'),
-  app        = express(),
-  bluemix    = require('./config/bluemix'),
-  extend     = require('util')._extend,
-  watson     = require('watson-developer-cloud'),
-  multiparty = require('multiparty');
+var express    = require('express'),
+  app          = express(),
+  extend       = require('util')._extend,
+  watson       = require('watson-developer-cloud'),
+  fs           = require('fs'),
+  vcapServices = require('vcap_services');
 
 // Bootstrap application settings
 require('./config/express')(app);
@@ -31,7 +31,7 @@ var credentials =  extend({
   username: '<username>',
   password: '<password>',
   version: 'v1-experimental'
-}, bluemix.getServiceCreds('document_conversion')); // VCAP_SERVICES
+}, vcapServices.getCredentials('document_conversion')); // VCAP_SERVICES
 
 var document_conversion = watson.document_conversion(credentials);
 
@@ -41,59 +41,74 @@ var types = {
   'NORMALIZED_TEXT': '.txt'
 };
 
+var samples = ['sampleHTML.html','samplePDF.pdf','sampleWORD.docx'];
+
+
+var uploadFolder = __dirname + '/uploads/';
+var sampleFolder = __dirname + '/public/data/';
+
+/**
+ * Returns the file path to a previously uploaded file or a sample file
+ * @param  {String} filename the file name
+ * @return {String} absolute path to the file or null if it doesn't exists
+ */
+function getFilePath(filename) {
+  if (samples.indexOf(filename) !== -1) {
+    return sampleFolder + filename;
+  } else {
+    if (fs.readdirSync(uploadFolder).indexOf(filename) !== -1)
+      return uploadFolder + filename;
+    else
+      return null;
+  }
+}
+
 /*
  * Uploads a file
  */
-app.post('/files', function(req, res, next) {
-  var form = new multiparty.Form({autoFields: true});
-  form.on('error', next);
-
-  form.on('part', function(part) {
-    console.log('filename: ', part.filename);
-    part.path = part.path || part.filename;
-    document_conversion.uploadDocument({file: part}, function (err, result) {
-      if (err) {
-        return res.status(err.code || 500).send(err);
-      }
-      res.json({id: result.id, filename: part.filename});
+app.post('/files', app.upload.single('document'), function(req, res, next) {
+  if (!req.file  && !req.file.path) {
+    return next({
+      error: 'Missing required parameter: file',
+      code: 400
     });
-
-    part.on('error', next);
-  });
-  form.parse(req);
+  }
+  res.json({ id: req.file.filename });
 });
 
 /*
- * Converts a document using the service
+ * Converts a document
  */
-app.get('/convert_document/:document_id/:conversion_target', function(req, res) {
-  if (!types[req.params.conversion_target])
-    return res.status(400).json({
-      code:400,
-      error: 'Unvalid conversion type: '+ req.params.conversion_target
-    });
+app.get('/api/convert', function(req, res, next) {
+  var file = getFilePath(req.query.document_id);
+  var params = {
+    conversion_target : req.query.conversion_target,
+    file: file ? fs.createReadStream(file) : null
+  };
 
-  document_conversion.convert(req.params, function(err, data) {
+  document_conversion.convert(params, function(err, data) {
     if (err) {
-      console.error('document conversion error:', err.stack || err);
-      return res.status(err.code || 500).json(err);
+      next(err);
     }
-    res.type(types[req.params.conversion_target]);
-    if (req.query.download){
-      res.setHeader('content-disposition','attachment; filename=' + req.query.filename);
+    var type = types[req.query.conversion_target];
+    res.type(type);
+    if (req.query.download) {
+      res.setHeader('content-disposition','attachment; filename=output-' + Date.now() + '.' + type);
     }
     res.send(data);
   });
 });
 
+
 /*
  * Returns an uploaded file from the service
  */
 app.get('/files/:id', function(req, res) {
-  document_conversion.getDocument({id: req.params.id})
+  var file = getFilePath(req.params.id);
+  fs.createReadStream(file)
   .on('response', function(response) {
     if (req.query.download) {
-     response.headers['content-disposition'] = 'attachment; filename=' + req.query.filename;
+     response.headers['content-disposition'] = 'attachment; filename=' + req.params.id;
     }
   })
   .pipe(res);

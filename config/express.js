@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 IBM Corp. All Rights Reserved.
+ * Copyright 2015 IBM Corp. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@
 
 // Module dependencies
 var express    = require('express'),
-  favicon      = require('serve-favicon'),
-  errorhandler = require('errorhandler'),
-  bodyParser   = require('body-parser');
+  bodyParser   = require('body-parser'),
+  multer       = require('multer'),
+  findRemoveSync = require('find-remove');
 
 module.exports = function (app) {
 
@@ -31,11 +31,22 @@ module.exports = function (app) {
   // Setup static public directory
   app.use(express.static(__dirname + '/../public'));
 
-  app.use(favicon(__dirname + '/../public/images/favicon.ico'));
+  // Setup the upload mechanism
+  var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, './uploads/');
+    },
+    filename: function (req, file, cb) {
+      cb(null, Date.now() + '-' + file.originalname);
+    }
+  });
 
-  // Add error handling in dev
-  if (!process.env.VCAP_SERVICES) {
-    app.use(errorhandler());
-  }
-
+  var upload = multer({ storage: storage });
+  app.upload = upload;
+  // Remove files older than 1 hour every hour.
+  setInterval(function() {
+    var removed = findRemoveSync(__dirname + '/../uploads', {age: {seconds: 3600}});
+    if (removed.length > 0)
+      console.log('removed:', removed);
+  }, 3600000);
 };

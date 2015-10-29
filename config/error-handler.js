@@ -32,7 +32,8 @@ module.exports = function (app) {
       code: err.code || 500,
       error: err.error || err.message
     };
-    console.log('error:', error);
+    if (req.url.indexOf('/js/') === -1)
+      console.log('error:', error, 'url:', req.url);
 
     res.status(error.code).json(error);
   });
