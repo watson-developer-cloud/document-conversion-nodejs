@@ -5,7 +5,7 @@ declared-services:
 applications:
 - services:
   - document-conversion-service
-  name: document-conversion-nodejs
+  name: document-conversion-demo
   command: node app.js
   path: .
   memory: 512M
