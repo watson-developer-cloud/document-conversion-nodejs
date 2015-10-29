@@ -27,6 +27,11 @@ $(document).ready(function() {
     acceptFileTypes: /(\.|\/)(pdf|doc|docx|html)$/i,
     add: function(e, data) {
       if (data.files && data.files[0]) {
+        $('.upload--file-chooser-name').html(data.files[0].name);
+        $('._content--choose-output-format.active').removeClass('active');
+        $('._content--output.active').removeClass('active');
+        $('._content--choose-output-format').addClass('active');
+
         // check file size
         if(data.files[0]['size'] > 1024000) {
           showError('The file size exceeds the limit allowed. The maximum file size is 1 MB.');
@@ -34,11 +39,6 @@ $(document).ready(function() {
         } else {
           hideError();
         }
-
-        $('.upload--file-chooser-name').html(data.files[0].name);
-        $('._content--choose-output-format.active').removeClass('active');
-        $('._content--output.active').removeClass('active');
-        $('._content--choose-output-format').addClass('active');
 
         data.submit().complete(function(result) {
           id = result.responseJSON.id;
