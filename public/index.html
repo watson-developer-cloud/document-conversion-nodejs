@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -59,16 +59,16 @@
 			</div>
 			<div class="banner--service-links">
 				<li class="base--li banner--service-link-item">
-					<a href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/document-conversion/api/v1/" class="base--a" target="_blank">API Reference</a>
+					<a href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/document-conversion/api/v1/" class="base--a" target="_blank">API Overview</a>
 				</li>
 				<li class="base--li banner--service-link-item">
 					<a href="http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/doc/document-conversion/" class="base--a" target="_blank">Documentation</a>
 				</li>
-        <li class="base--li banner--service-link-item" target="_blank">
-          <a href="https://github.com/watson-developer-cloud/document-conversion-nodejs" class="base--a" target="_blank">Fork on Github</a>
-        </li>
 				<li class="base--li banner--service-link-item" target="_blank">
 					<a href="https://bluemix.net/deploy?repository=https://github.com/watson-developer-cloud/document-conversion-nodejs" class="base--a" target="_blank">Fork and Deploy on Bluemix</a>
+				</li>
+				<li class="base--li banner--service-link-item" target="_blank">
+					<a href="https://github.com/watson-developer-cloud/document-conversion-nodejs" class="base--a" target="_blank">Fork on Github</a>
 				</li>
 			</div>
 		</div>
@@ -113,7 +113,7 @@
 				 <form class="upload-form" id="fileupload" method='POST', enctype='multipart/form-data', action='/files'>
 					<div class="upload--container dropzone">
 						<div class="upload--description">
-							Drag or upload a pdf, Microsoft™ Word(.doc, .docx) or HTML document
+							Drag or upload a pdf, Microsoft™ Word(.doc, .docx) or HTML document. (The max file size is 1 MB.)
 						</div>
 
 						<div class="upload--file-chooser base--label">
@@ -125,8 +125,12 @@
 				</form>
 
 			</div>
+			<p class="upload--explanation">
+				Attention: IBM Bluemix collects data from all requests to this demonstration and uses the data to improve the services. Do not use confidential or restricted data.
+			</p>
+			<div class="error" style="color:#a53725;text-align:center;"></div>
+
 		</div>
-    <div class="error" style="color:#a53725;text-align:center;"></div>
 
 		<div class="_content--choose-output-format">
 			<h2 id="choose-output-format" class="base--h2">Choose an output format</h2>
@@ -149,6 +153,7 @@
 				</div>
 			</div>
 		</div>
+
 		<div class="_content--output">
 			<p class="base--p description--answer-unit">
 				The Answer units can be run through a utility to create a Solr collection needed to train the Retrieve and Rank service.
@@ -196,10 +201,11 @@
 
 </div>
 
-   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/jquery.fileupload.min.js"></script>
-   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/jquery.iframe-transport.min.js"></script>
+
+   <script type="text/javascript" src="js/vendors/jquery.min.js"></script>
+   <script type="text/javascript" src="js/vendors/jquery.ui.widget.js"></script>
+   <script type="text/javascript" src="js/vendors/jquery.fileupload.js"></script>
+   <script type="text/javascript" src="js/vendors/jquery.iframe-transport.js"></script>
    <script type="text/javascript" src="js/demo.js"></script>
 </body>
 </html>

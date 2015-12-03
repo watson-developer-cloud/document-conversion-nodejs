@@ -18,20 +18,17 @@
 
 var express    = require('express'),
   app          = express(),
-  extend       = require('util')._extend,
   watson       = require('watson-developer-cloud'),
-  fs           = require('fs'),
-  vcapServices = require('vcap_services');
-
+  fs           = require('fs');
 // Bootstrap application settings
 require('./config/express')(app);
 
 // if bluemix credentials exists, then override local
-var credentials =  extend({
+var credentials = {
   username: '<username>',
   password: '<password>',
   version: 'v1-experimental'
-}, vcapServices.getCredentials('document_conversion')); // VCAP_SERVICES
+};
 
 var document_conversion = watson.document_conversion(credentials);
 

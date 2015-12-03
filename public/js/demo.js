@@ -30,7 +30,6 @@ $(document).ready(function() {
         $('.upload--file-chooser-name').html(data.files[0].name);
         $('._content--choose-output-format.active').removeClass('active');
         $('._content--output.active').removeClass('active');
-        $('._content--choose-output-format').addClass('active');
 
         // check file size
         if(data.files[0]['size'] > 1024000) {
@@ -39,6 +38,8 @@ $(document).ready(function() {
         } else {
           hideError();
         }
+
+        $('._content--choose-output-format').addClass('active');
 
         data.submit().complete(function(result) {
           id = result.responseJSON.id;
