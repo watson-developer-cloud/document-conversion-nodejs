@@ -29,6 +29,8 @@ module.exports = function (app) {
   // 2. helmet with defaults
   app.use(helmet());
 
+  app.use(helmet.frameguard('allow-from', 'https://docs.google.com'));
+
   // 3. rate limiting.
   app.use('/api/', rateLimit({
     windowMs: 30 * 1000, // seconds
