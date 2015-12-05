@@ -10,16 +10,20 @@
     "url": "https://github.com/watson-developer-cloud/document-conversion-nodejs.git"
   },
   "author": "IBM Corp.",
-  "contributors": [{
-    "name": "James Zhang",
-    "email": "jzhang300@us.ibm.com"
-  }, {
-    "name": "Eva Xiaohui Luo",
-    "email": "evaluo_xhl@us.ibm.com"
-  }, {
-    "name": "German Attanasio Ruiz",
-    "email": "germanatt@us.ibm.com"
-  }],
+  "contributors": [
+    {
+      "name": "James Zhang",
+      "email": "jzhang300@us.ibm.com"
+    },
+    {
+      "name": "Eva Xiaohui Luo",
+      "email": "evaluo_xhl@us.ibm.com"
+    },
+    {
+      "name": "German Attanasio Ruiz",
+      "email": "germanatt@us.ibm.com"
+    }
+  ],
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/watson-developer-cloud/document-conversion-nodejs/issues"
@@ -29,10 +33,13 @@
   },
   "dependencies": {
     "body-parser": "~1.14.1",
-    "express": "~4.13.3",
-    "find-remove": "^0.2.8",
-    "multer": "^1.1.0",
     "errorhandler": "~1.4.1",
+    "express": "~4.13.3",
+    "express-rate-limit": "^2.0.2",
+    "express-secure-only": "^0.2.1",
+    "find-remove": "^0.2.8",
+    "helmet": "^0.15.0",
+    "multer": "^1.1.0",
     "multiparty": "~4.1.2",
     "serve-favicon": "~2.3.0",
     "watson-developer-cloud": "~1.0.5"

@@ -17,18 +17,21 @@
 'use strict';
 
 // Module dependencies
-var express    = require('express'),
-  bodyParser   = require('body-parser'),
-  multer       = require('multer'),
+var express      = require('express'),
+  bodyParser     = require('body-parser'),
+  multer         = require('multer'),
   findRemoveSync = require('find-remove');
 
 module.exports = function (app) {
+  app.enable('trust proxy');
+
+  // Only loaded when SECURE_EXPRESS is `true`
+  if (process.env.SECURE_EXPRESS)
+    require('./security')(app);
 
   // Configure Express
-  app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(bodyParser.json());
-
-  // Setup static public directory
+  app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
+  app.use(bodyParser.json({ limit: '1mb' }));
   app.use(express.static(__dirname + '/../public'));
 
   // Setup the upload mechanism
@@ -43,6 +46,7 @@ module.exports = function (app) {
 
   var upload = multer({ storage: storage });
   app.upload = upload;
+
   // Remove files older than 1 hour every hour.
   setInterval(function() {
     var removed = findRemoveSync(__dirname + '/../uploads', {age: {seconds: 3600}});
