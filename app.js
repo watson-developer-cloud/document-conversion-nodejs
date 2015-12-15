@@ -27,7 +27,7 @@ require('./config/express')(app);
 var credentials = {
   username: '<username>',
   password: '<password>',
-  version: 'v1-experimental'
+  version: 'v1'
 };
 
 var document_conversion = watson.document_conversion(credentials);
