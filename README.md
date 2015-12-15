@@ -33,7 +33,7 @@ Give it a try! Click the button below to fork into IBM DevOps Services and deplo
 
 5. Create the Document Conversion service in Bluemix
   ```sh
-  $ cf create-service document_conversion experimental document-conversion-service
+  $ cf create-service document_conversion standard document-conversion-service
   ```
 
 6. Push it live!
@@ -67,7 +67,7 @@ Give it a try! Click the button below to fork into IBM DevOps Services and deplo
           },
         "label": "document_conversion",
         "name": "document-conversion-service",
-        "plan": "experimental"
+        "plan": "standard"
      }]
     }
     }

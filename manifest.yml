@@ -1,7 +1,7 @@
 declared-services:
   document-conversion-service:
     label: document_conversion
-    plan: experimental
+    plan: standard
 applications:
 - services:
   - document-conversion-service
