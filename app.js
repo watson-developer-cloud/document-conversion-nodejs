@@ -27,6 +27,7 @@ require('./config/express')(app);
 var credentials = {
   username: '<username>',
   password: '<password>',
+  version_date: '2015-12-01',
   version: 'v1'
 };
 
@@ -59,6 +60,10 @@ function getFilePath(filename) {
       return null;
   }
 }
+
+app.get('/', function(req, res) {
+  res.render('index', { ct: req._csrfToken });
+});
 
 /*
  * Uploads a file

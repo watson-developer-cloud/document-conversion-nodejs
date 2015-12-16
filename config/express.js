@@ -24,6 +24,7 @@ var express      = require('express'),
 
 module.exports = function (app) {
   app.enable('trust proxy');
+  app.set('view engine', 'ejs');
 
   // Only loaded when SECURE_EXPRESS is `true`
   if (process.env.SECURE_EXPRESS)

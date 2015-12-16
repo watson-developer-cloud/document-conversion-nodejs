@@ -101,6 +101,8 @@ $(document).ready(function() {
   });
 
   function _error(xhr) {
+    $('._content--choose-output-format.active').removeClass('active');
+    $('._content--output.active').removeClass('active');
     var response = JSON.parse(xhr.responseText);
     if (response.error) {
       showError(response.error);
@@ -122,6 +124,9 @@ $(document).ready(function() {
     });
 
     $.ajax({
+      headers: {
+        'csrf-token': $('meta[name="ct"]').attr('content')
+      },
       url: '/api/convert?' + params,
       success: function(data) {
         if (output_type === 'json') {
