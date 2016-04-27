@@ -41,11 +41,6 @@ Give it a try! Click the button below to fork into IBM DevOps Services and deplo
   $ cf push
   ```
 
-7. Update sample files' `ids`. run `node setup.js` and update the returned `ids` in `demo.js`
-  ```sh
-  $ node setup.js
-  ```
-
 ## Running locally
   The application uses [Node.js](http://nodejs.org/) and [npm](https://www.npmjs.com/) so you will have to download and install them as part of the steps below.
 
