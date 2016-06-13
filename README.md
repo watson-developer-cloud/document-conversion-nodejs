@@ -1,4 +1,4 @@
-# Document Conversion Demo
+# Document Conversion Demo [![Build Status](https://travis-ci.org/watson-developer-cloud/document-conversion-nodejs.svg?branch=master)](https://travis-ci.org/watson-developer-cloud/document-conversion-nodejs)
 
   The [Document Conversion][service_url] service transforms HTML, PDF, and Microsoft™ Word documents into normalized HTML, plain text, or sets of Answer units. The Answer units can be run through a utility to convert it to the Solr JSON file type needed to train the Retrieve and Rank service.
 

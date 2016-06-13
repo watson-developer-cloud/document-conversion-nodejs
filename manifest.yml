@@ -6,9 +6,6 @@ applications:
 - services:
   - document-conversion-service
   name: document-conversion-demo
-  command: node app.js
+  command: npm start
   path: .
   memory: 512M
-  env:
-    NODE_ENV: production
-    SECURE_EXPRESS: 1

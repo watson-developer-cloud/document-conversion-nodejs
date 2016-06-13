@@ -16,10 +16,12 @@
 
 'use strict';
 
-var express    = require('express'),
-  app          = express(),
-  watson       = require('watson-developer-cloud'),
-  fs           = require('fs');
+var express = require('express');
+var app = express();
+var watson = require('watson-developer-cloud');
+var fs = require('fs');
+var path = require('path');
+
 // Bootstrap application settings
 require('./config/express')(app);
 
@@ -31,7 +33,7 @@ var credentials = {
   version: 'v1'
 };
 
-var document_conversion = watson.document_conversion(credentials);
+var documentConversion = watson.document_conversion(credentials);
 
 var types = {
   'ANSWER_UNITS': '.json',
@@ -39,11 +41,9 @@ var types = {
   'NORMALIZED_TEXT': '.txt'
 };
 
-var samples = ['sampleHTML.html','samplePDF.pdf','sampleWORD.docx'];
-
-
-var uploadFolder = __dirname + '/uploads/';
-var sampleFolder = __dirname + '/public/data/';
+var samples = ['sampleHTML.html', 'samplePDF.pdf', 'sampleWORD.docx'];
+var uploadFolder = path.join(__dirname, 'uploads/');
+var sampleFolder = path.join(__dirname, 'public/data/');
 
 /**
  * Returns the file path to a previously uploaded file or a sample file
@@ -54,28 +54,31 @@ function getFilePath(filename) {
   if (samples.indexOf(filename) !== -1) {
     return sampleFolder + filename;
   } else {
-    if (fs.readdirSync(uploadFolder).indexOf(filename) !== -1)
+    console.log(uploadFolder);
+    if (fs.readdirSync(uploadFolder).indexOf(filename) !== -1) {
       return uploadFolder + filename;
-    else
-      return null;
+    }
+    return null;
   }
 }
 
 app.get('/', function(req, res) {
-  res.render('index', { ct: req._csrfToken });
+  res.render('index');
 });
 
 /*
  * Uploads a file
  */
 app.post('/files', app.upload.single('document'), function(req, res, next) {
-  if (!req.file  && !req.file.path) {
+  if (!req.file && !req.file.path) {
     return next({
       error: 'Missing required parameter: file',
       code: 400
     });
   }
-  res.json({ id: req.file.filename });
+  res.json({
+    id: req.file.filename
+  });
 });
 
 /*
@@ -84,33 +87,31 @@ app.post('/files', app.upload.single('document'), function(req, res, next) {
 app.get('/api/convert', function(req, res, next) {
   var file = getFilePath(req.query.document_id);
   var params = {
-    conversion_target : req.query.conversion_target,
+    conversion_target: req.query.conversion_target,
     file: file ? fs.createReadStream(file) : null
   };
 
-  document_conversion.convert(params, function(err, data) {
+  documentConversion.convert(params, function(err, data) {
     if (err) {
       return next(err);
     }
     var type = types[req.query.conversion_target];
     res.type(type);
     if (req.query.download) {
-      res.setHeader('content-disposition','attachment; filename=output-' + Date.now() + '.' + type);
+      res.setHeader('content-disposition', 'attachment; filename=output-' + Date.now() + '.' + type);
     }
     res.send(data);
   });
 });
-
 
 /*
  * Returns an uploaded file from the service
  */
 app.get('/files/:id', function(req, res) {
   var file = getFilePath(req.params.id);
-  fs.createReadStream(file)
-  .on('response', function(response) {
+  fs.createReadStream(file).on('response', function(response) {
     if (req.query.download) {
-     response.headers['content-disposition'] = 'attachment; filename=' + req.params.id;
+      response.headers['content-disposition'] = 'attachment; filename=' + req.params.id;
     }
   })
   .pipe(res);
@@ -119,6 +120,4 @@ app.get('/files/:id', function(req, res) {
 // error-handler settings
 require('./config/error-handler')(app);
 
-var port = process.env.VCAP_APP_PORT || 3000;
-app.listen(port);
-console.log('listening at:', port);
+module.exports = app;
