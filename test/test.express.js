@@ -13,25 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- /* eslint no-unused-vars: "off" */
 
 'use strict';
 
-module.exports = function(app) {
-  // catch 404 and forward to error handler
-  app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.code = 404;
-    err.message = 'Not Found';
-    next(err);
-  });
+var app = require('../app');
+var request = require('supertest');
 
-  // error handler
-  app.use(function(err, req, res, next) {
-    var error = {
-      code: err.code || 500,
-      error: err.error || err.message
-    };
-    res.status(error.code).json(error);
+describe('express', function() {
+  it('load home page when GET /', function(done) {
+    request(app).get('/').expect(200, done);
   });
-};
+});

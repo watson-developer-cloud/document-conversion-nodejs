@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-<meta name="ct" content="<%= ct %>">
+<meta name="ct" content="<%= locals.ct %>">
 <link rel="stylesheet" href="css/style.css">
 
 </head>
@@ -92,19 +92,19 @@
 
 			<div class="_content--sample">
 				<div class="sample--list-item">
-					<div class="sample--list-item-tab" onclick="convert_sample_html()">
+					<div class="sample--list-item-tab" onclick="convertSampleHtml()">
 						<span class="sample--icon icon icon-html_icon"></span>
 						<span class="sample--title sample--html-file">Sample.html</span>
 					</div>
 				</div>
 				<div class="sample--list-item">
-					<div class="sample--list-item-tab" onclick="convert_sample_docx()">
+					<div class="sample--list-item-tab" onclick="convertSampleDocx()">
 						<span class="sample--icon icon icon-doc_icon"></span>
 						<span class="sample--title sample--docx-file">Sample.docx</span>
 					</div>
 				</div>
 				<div class="sample--list-item">
-					<div class="sample--list-item-tab" onclick="convert_sample_pdf()">
+					<div class="sample--list-item-tab" onclick="convertSamplePdf()">
 						<span class="sample--icon icon icon-pdf_icon"></span>
 						<span class="sample--title sample--pdf-file">Sample.pdf</span>
 					</div>
@@ -209,6 +209,14 @@
    <script type="text/javascript" src="js/vendors/jquery.fileupload.js"></script>
    <script type="text/javascript" src="js/vendors/jquery.iframe-transport.js"></script>
    <script type="text/javascript" src="js/demo.js"></script>
-   <script type="text/javascript" src="js/ga.js"></script>
+   <script type="text/javascript">
+     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+     ga('create', '<%= locals.ga %>', 'auto');
+     ga('send', 'pageview');
+   </script>
 </body>
 </html>

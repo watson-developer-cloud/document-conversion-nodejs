@@ -1,0 +1,21 @@
+{
+  "rules": {
+    "no-console": 0,
+    "func-names": 0,
+    "vars-on-top": 0,
+    "no-else-return": 0,
+    "consistent-return": 0,
+    "no-process-exit": 0
+  },
+  "globals": {
+    "casper": false,
+    "describe": true,
+    "it": true
+  },
+  "env": {
+    "node": true,
+    "jquery": true,
+    "browser": true
+  },
+  "extends": "eslint-config-airbnb-es5",
+}

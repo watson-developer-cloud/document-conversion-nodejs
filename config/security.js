@@ -17,14 +17,13 @@
 'use strict';
 
 // security.js
-var secure     = require('express-secure-only'),
-  csrf         = require('csurf'),
-  cookieParser = require('cookie-parser'),
-  rateLimit    = require('express-rate-limit'),
-  helmet       = require('helmet');
+var secure = require('express-secure-only');
+var csrf = require('csurf');
+var cookieParser = require('cookie-parser');
+var rateLimit = require('express-rate-limit');
+var helmet = require('helmet');
 
-module.exports = function (app) {
-
+module.exports = function(app) {
   // 1. redirects http to https
   app.use(secure());
 
@@ -37,7 +36,9 @@ module.exports = function (app) {
   app.use(cookieParser(secret));
 
   // 4. csrf
-  var csrfProtection = csrf({ cookie: true });
+  var csrfProtection = csrf({
+    cookie: true
+  });
   app.get('/', csrfProtection, function(req, res, next) {
     req._csrfToken = req.csrfToken();
     next();
@@ -49,12 +50,19 @@ module.exports = function (app) {
     delayMs: 0,
     max: 5,
     message: JSON.stringify({
-      error:'Too many requests, please try again in 30 seconds.',
+      error: 'Too many requests, please try again in 30 seconds.',
       code: 429
-    }),
+    })
   });
-
 
   // 3. rate limiting.
   app.use('/api/', csrfProtection, limiter);
+
+  app.get('/*', csrfProtection, function(req, res, next) {
+    res.locals = {
+      ga: process.env.GOOGLE_ANALYTICS,
+      ct: req.csrfToken()
+    };
+    next();
+  });
 };
