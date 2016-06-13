@@ -48,7 +48,7 @@ module.exports = function(app) {
   var limiter = rateLimit({
     windowMs: 60 * 1000, // seconds
     delayMs: 0,
-    max: 5,
+    max: 10,
     message: JSON.stringify({
       error: 'Too many requests, please try again in 30 seconds.',
       code: 429
