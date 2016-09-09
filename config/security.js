@@ -27,9 +27,53 @@ module.exports = function(app) {
   // 1. redirects http to https
   app.use(secure());
 
-  // 2. helmet with defaults
-  app.use(helmet());
-  app.use(helmet.frameguard('allow-from', 'https://docs.google.com'));
+  // 2. helmet with custom CSP header
+  var cspReportUrl = '/report-csp-violation';
+  app.use(helmet({
+    frameguard: {'allow-from': 'https://docs.google.com'},
+
+    contentSecurityPolicy: {
+      // Specify directives as normal.
+      directives: {
+        defaultSrc: ["'self'"], // default value for unspecified directives that end in -src
+        scriptSrc: ["'self'", 'www.google-analytics.com'], // jquery cdn, etc. try to avid "'unsafe-inline'"
+        styleSrc: ["'self'", "'unsafe-inline'"], // no inline css
+        imgSrc: ["'self'", 'www.google-analytics.com'], // should be "'self'" and possibly 'data:' for most apps, but vr demo loads random user-supplied image urls, and apparently * doesn't include data: URIs
+        connectSrc: ["'self'", '*.watsonplatform.net'], // ajax domains
+        // fontSrc: ["'self'"], // cdn?
+        objectSrc: ["'self'", 'https://docs.google.com'], // embeds (e.g. flash)
+        // mediaSrc: ["'self'", '*.watsonplatform.net'], // allow watson TTS streams
+        childSrc: ['https://docs.google.com'], // child iframes
+        frameAncestors: [], // parent iframes
+        formAction: ["'self'"], // where can forms submit to
+        pluginTypes: ['application/pdf', 'application/x-pdf'], // mime-types, e.g. 'application/pdf'
+        // sandbox: ['allow-forms', 'allow-scripts', 'allow-same-origin'], // options: allow-forms allow-same-origin allow-scripts allow-top-navigation
+        reportUri: cspReportUrl
+      },
+
+      // Set to true if you only want browsers to report errors, not block them.
+      // You may also set this to a function(req, res) in order to decide dynamically
+      // whether to use reportOnly mode, e.g., to allow for a dynamic kill switch.
+      reportOnly: false,
+
+      // Set to true if you want to blindly set all headers: Content-Security-Policy,
+      // X-WebKit-CSP, and X-Content-Security-Policy.
+      setAllHeaders: false,
+
+      // Set to true if you want to disable CSP on Android where it can be buggy.
+      disableAndroid: false,
+
+      // Set to false if you want to completely disable any user-agent sniffing.
+      // This may make the headers less compatible but it will be much faster.
+      // This defaults to `true`.
+      browserSniff: true
+    }
+  }));
+  // endpoint to report CSP violations
+  app.post(cspReportUrl, function(req, res) {
+    console.log('Content Security Policy Violation:\n', req.body);
+    res.status(204).send(); // 204 = No Content
+  });
 
   // 3. setup cookies
   var secret = Math.random().toString(36).substring(7);

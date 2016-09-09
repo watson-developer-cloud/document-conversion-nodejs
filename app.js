@@ -15,25 +15,24 @@
  */
 
 'use strict';
-
+require('dotenv').load({silent: true});
 var express = require('express');
 var app = express();
-var watson = require('watson-developer-cloud');
+var DocumentConversionV1 = require('watson-developer-cloud/document-conversion/v1');
 var fs = require('fs');
 var path = require('path');
 
 // Bootstrap application settings
 require('./config/express')(app);
 
-// if bluemix credentials exists, then override local
-var credentials = {
-  username: '<username>',
-  password: '<password>',
-  version_date: '2015-12-01',
-  version: 'v1'
-};
 
-var documentConversion = watson.document_conversion(credentials);
+var documentConversion = new DocumentConversionV1({
+  // If unspecified here, the DOCUMENT_CONVERSION_USERNAME and DOCUMENT_CONVERSION_PASSWORD env properties will be checked
+  // After that, the SDK will fall back to the bluemix-provided VCAP_SERVICES environment property
+  // username: '<username>',
+  // password: '<password>',
+  version_date: '2015-12-01'
+});
 
 var types = {
   'ANSWER_UNITS': '.json',

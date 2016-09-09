@@ -268,3 +268,10 @@ Tabbed Panels js
     $(idName).addClass('active');
   });
 })();
+
+
+$(function() {
+  $('#btn-convert-sample-html').click(convertSampleHtml);
+  $('#btn-convert-sample-docx').click(convertSampleDocx);
+  $('#btn-convert-sample-pdf').click(convertSamplePdf);
+});
