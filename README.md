@@ -74,7 +74,7 @@ Give it a try! Click the button below to fork into IBM DevOps Services and deplo
 3. Go to the project folder in a terminal and run:
     `npm install`
 4. Start the application
-5.  `node app.js`
+5.  `node server.js`
 6. Go to `http://localhost:3000`
 
 
