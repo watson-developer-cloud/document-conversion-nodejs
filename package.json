@@ -29,6 +29,9 @@
     "url": "https://github.com/watson-developer-cloud/document-conversion-nodejs/issues"
   },
   "dependencies": {
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-react": "^6.11.1",
+    "babelify": "^7.3.0",
     "body-parser": "~1.15.1",
     "cf-deployment-tracker-client": "0.1.1",
     "cookie-parser": "^1.4.0",
@@ -36,13 +39,18 @@
     "dotenv": "^2.0.0",
     "ejs": "^2.4.2",
     "express": "~4.13.4",
+    "express-browserify": "^1.0.2",
     "express-rate-limit": "^2.3.1",
     "express-secure-only": "^0.2.1",
     "find-remove": "^0.2.8",
     "helmet": "^2.1.1",
     "morgan": "^1.7.0",
     "multer": "^1.1.0",
-    "watson-developer-cloud": "^2.2.0"
+    "react": "^15.3.1",
+    "uglifyify": "^3.0.3",
+    "watson-developer-cloud": "^2.2.0",
+    "watson-react-components": "0.0.16",
+    "watson-ui-components": "^0.5.3"
   },
   "scripts": {
     "start": "node server.js",

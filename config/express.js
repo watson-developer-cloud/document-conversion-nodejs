@@ -23,20 +23,35 @@ var multer = require('multer');
 var findRemoveSync = require('find-remove');
 var path = require('path');
 var morgan = require('morgan');
+var expressBrowserify = require('express-browserify');
 
 module.exports = function(app) {
   app.enable('trust proxy');
-  app.set('view engine', 'ejs');
 
   // Only loaded when running in Bluemix
   if (process.env.VCAP_APPLICATION) {
     require('./security')(app);
   }
 
+  // automatically bundle the front-end js on the fly
+  // note: this should come before the express.static since bundle.js is in the public folder
+  var isDev = (app.get('env') === 'development');
+  var browserifyier = expressBrowserify('./public/js/bundle.jsx', {
+    watch: isDev,
+    debug: isDev,
+    extension: [ 'jsx' ],
+    transform:  [["babelify", { "presets": ["es2015", "react"] }]]
+  });
+  if (!isDev) {
+    browserifyier.browserify.transform('uglifyify', {global:true})
+  }
+  app.get('/js/bundle.js', browserifyier);
+
   // Configure Express
   app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
   app.use(bodyParser.json({ limit: '1mb' }));
   app.use(express.static(path.join(__dirname, '..', 'public')));
+  app.use(express.static(path.join(__dirname, '..', 'node_modules/watson-ui-components/dist')));
   app.use(morgan('dev'));
 
   // Setup the upload mechanism
@@ -49,10 +64,9 @@ module.exports = function(app) {
     }
   });
 
-  var upload = multer({
+  app.upload = multer({
     storage: storage
   });
-  app.upload = upload;
 
   // Remove files older than 1 hour every hour.
   setInterval(function() {

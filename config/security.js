@@ -18,7 +18,6 @@
 
 // security.js
 var secure = require('express-secure-only');
-var csrf = require('csurf');
 var cookieParser = require('cookie-parser');
 var rateLimit = require('express-rate-limit');
 var helmet = require('helmet');
@@ -79,16 +78,7 @@ module.exports = function(app) {
   var secret = Math.random().toString(36).substring(7);
   app.use(cookieParser(secret));
 
-  // 4. csrf
-  var csrfProtection = csrf({
-    cookie: true
-  });
-  app.get('/', csrfProtection, function(req, res, next) {
-    req._csrfToken = req.csrfToken();
-    next();
-  });
-
-  // 5. rate limiting
+  // 4. rate limiting
   var limiter = rateLimit({
     windowMs: 60 * 1000, // seconds
     delayMs: 0,
@@ -98,15 +88,5 @@ module.exports = function(app) {
       code: 429
     })
   });
-
-  // 3. rate limiting.
-  app.use('/api/', csrfProtection, limiter);
-
-  app.get('/*', csrfProtection, function(req, res, next) {
-    res.locals = {
-      ga: process.env.GOOGLE_ANALYTICS,
-      ct: req.csrfToken()
-    };
-    next();
-  });
+  app.use('/api/', limiter);
 };

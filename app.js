@@ -61,10 +61,6 @@ function getFilePath(filename) {
   }
 }
 
-app.get('/', function(req, res) {
-  res.render('index');
-});
-
 /*
  * Uploads a file
  */
