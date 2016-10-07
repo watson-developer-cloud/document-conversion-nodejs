@@ -1,21 +1,30 @@
 {
+  "extends": [
+    "airbnb",
+    "plugin:import/errors",
+    "plugin:import/warnings"
+  ],
+  "parser": "babel-eslint",
   "rules": {
-    "no-console": 0,
-    "func-names": 0,
-    "vars-on-top": 0,
-    "no-else-return": 0,
-    "consistent-return": 0,
-    "no-process-exit": 0
-  },
-  "globals": {
-    "casper": false,
-    "describe": true,
-    "it": true
+    "react/require-extension": "off", // deprecated and prints a warning unless explicitly disabled
+    "react/jsx-filename-extension": ["warn", {
+      "extensions": [".js", ".jsx"]
+    }],
+    "react/prefer-es6-class": "off",
+    "import/newline-after-import": "off",
+    "import/no-extraneous-dependencies": ["warn", {
+      "devDependencies": true,
+      "optionalDependencies": true,
+      "peerDependencies": true
+    }],
+    "max-len": ["warn", 160],
+    "consistent-return": "off",
+    "func-names": "off",
+    "global-require": "off",
   },
   "env": {
     "node": true,
-    "jquery": true,
-    "browser": true
-  },
-  "extends": "eslint-config-airbnb-es5",
+    "browser": true,
+    "mocha": true
+  }
 }

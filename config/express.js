@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-'use strict';
 
 // Module dependencies
-var express = require('express');
-var bodyParser = require('body-parser');
-var multer = require('multer');
-var findRemoveSync = require('find-remove');
-var path = require('path');
-var morgan = require('morgan');
-var expressBrowserify = require('express-browserify');
+const express = require('express');
+const bodyParser = require('body-parser');
+const findRemoveSync = require('find-remove');
+const path = require('path');
+const morgan = require('morgan');
+const expressBrowserify = require('express-browserify');
 
-module.exports = function(app) {
+module.exports = function (app) {
   app.enable('trust proxy');
 
   // Only loaded when running in Bluemix
@@ -35,15 +33,15 @@ module.exports = function(app) {
 
   // automatically bundle the front-end js on the fly
   // note: this should come before the express.static since bundle.js is in the public folder
-  var isDev = (app.get('env') === 'development');
-  var browserifyier = expressBrowserify('./public/js/bundle.jsx', {
+  const isDev = (app.get('env') === 'development');
+  const browserifyier = expressBrowserify('./public/js/bundle.jsx', {
     watch: isDev,
     debug: isDev,
-    extension: [ 'jsx' ],
-    transform:  [["babelify", { "presets": ["es2015", "react"] }]]
+    extension: ['jsx'],
+    transform: [['babelify', { presets: ['es2015', 'react'] }]],
   });
   if (!isDev) {
-    browserifyier.browserify.transform('uglifyify', {global:true})
+    browserifyier.browserify.transform('uglifyify', { global: true });
   }
   app.get('/js/bundle.js', browserifyier);
 
@@ -54,25 +52,8 @@ module.exports = function(app) {
   app.use(express.static(path.join(__dirname, '..', 'node_modules/watson-react-components/dist/')));
   app.use(morgan('dev'));
 
-  // Setup the upload mechanism
-  var storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-      cb(null, './uploads/');
-    },
-    filename: function(req, file, cb) {
-      cb(null, Date.now() + '-' + file.originalname);
-    }
-  });
-
-  app.upload = multer({
-    storage: storage
-  });
-
   // Remove files older than 1 hour every hour.
-  setInterval(function() {
-    var removed = findRemoveSync(path.join(__dirname, '..', 'uploads'), { age: { seconds: 3600 } });
-    if (removed.length > 0) {
-      console.log('removed:', removed);
-    }
+  setInterval(() => {
+    findRemoveSync(path.join(__dirname, '..', 'uploads'), { age: { seconds: 3600 } });
   }, 3600000);
 };

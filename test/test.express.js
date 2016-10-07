@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-'use strict';
 
-var app = require('../app');
-var request = require('supertest');
+const app = require('../app');
+const request = require('supertest');
 
-describe('express', function() {
-  it('load home page when GET /', function(done) {
+describe('express', () => {
+  it('load home page when GET /', (done) => {
     request(app).get('/').expect(200, done);
   });
 });
