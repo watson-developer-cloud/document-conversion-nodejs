@@ -1,5 +1,5 @@
 import React from 'react';
-import { Code } from 'watson-react-components';
+import { Code, Icon } from 'watson-react-components';
 
 export const formats = {
     json: 'ANSWER_UNITS',
@@ -15,7 +15,7 @@ export default React.createClass({
 
     getInitialState: function() {
         return {
-            output: ''
+            content: ''
         };
     },
 
@@ -37,10 +37,10 @@ export default React.createClass({
         }
         fetch(`/api/convert?document_id=${id}&conversion_target=${formats[format]}`)
             .then(res => res.text())
-            .then(output => this.setOutput(id, format, output));
+            .then(content => this.setContent(id, format, content));
     },
 
-    setOutput(id, format, output) {
+    setContent(id, format, content) {
         if (id != this.props.id || format != this.props.format) {
             // this could happen if the user rapidly switches formats
             // eslint-disable-next-line no-console
@@ -49,28 +49,28 @@ export default React.createClass({
         }
         if (format === 'json') {
             try {
-                output = JSON.stringify(JSON.parse(output), null, 2);
+                // pretty print JSON output
+                content = JSON.stringify(JSON.parse(content), null, 2);
             } catch (ex) {
                 // eslint-disable-next-line no-console
-                console.log('failed to parse output as json', id, format, ex, output);
+                console.log('failed to parse output as json', id, format, ex, content);
             }
         }
-        this.setState({output});
+        this.setState({content});
     },
 
     render() {
-
-        if (!this.props.id || !this.props.format) {
-            return (<div/>)
+        if (this.state.content) {
+            return (
+                <div>
+                    <Code type={this.props.format}>{this.state.content}</Code>
+                    <a title="Download output file" href={`/api/convert?document_id=${this.props.id}&conversion_target=${formats[this.props.format]}&download=true`}
+                       className="base--a">Download</a>
+                </div>
+            );
+        } else {
+            return (<Icon type="loader" />);
         }
-
-        return (
-            <div>
-                <Code type={this.props.format}>{this.state.output}</Code>
-                <a title="Download output file" href={`/api/convert?document_id=${this.props.id}&conversion_target=${formats[this.props.format]}&download=true`}
-                   className="base--a">Download</a>
-            </div>
-        );
     }
 
 });

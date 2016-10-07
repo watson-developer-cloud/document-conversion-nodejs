@@ -1,5 +1,5 @@
 import React from 'react';
-import { Code } from 'watson-react-components';
+import { Code, Icon } from 'watson-react-components';
 
 export default React.createClass({
     propTypes: {
@@ -29,11 +29,16 @@ export default React.createClass({
     },
 
     render() {
-        return (
-            <pre className="code--pre language-markup">
-               <Code type="html">{this.state.content}</Code>
-            </pre>
-        );
+        if (this.state.content) {
+            return (
+                <pre className="code--pre language-markup">
+                   <Code type="html">{this.state.content}</Code>
+                </pre>
+            );
+        } else {
+            return (<Icon type="loader" />)
+        }
+
     }
 
 });
