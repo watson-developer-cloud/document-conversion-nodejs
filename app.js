@@ -61,6 +61,10 @@ function getFilePath(filename) {
   return null;
 }
 
+app.get('/', (req, res) => {
+  res.render('index');
+});
+
 // Setup the upload mechanism
 const upload = multer({
   storage: multer.diskStorage({

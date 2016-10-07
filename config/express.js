@@ -25,6 +25,9 @@ const expressBrowserify = require('express-browserify');
 
 module.exports = function (app) {
   app.enable('trust proxy');
+  app.set('view engine', 'jsx');
+  app.engine('jsx', require('express-react-views').createEngine());
+
 
   // Only loaded when running in Bluemix
   if (process.env.VCAP_APPLICATION) {
@@ -38,7 +41,7 @@ module.exports = function (app) {
     watch: isDev,
     debug: isDev,
     extension: ['jsx'],
-    transform: [['babelify', { presets: ['es2015', 'react'] }]],
+    transform: ['babelify'],
   });
   if (!isDev) {
     browserifyier.browserify.transform('uglifyify', { global: true });
