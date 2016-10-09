@@ -17,7 +17,6 @@
 
 // security.js
 const secure = require('express-secure-only');
-const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 
@@ -73,10 +72,6 @@ module.exports = function (app) {
     console.log('Content Security Policy Violation:\n', req.body);
     res.status(204).send(); // 204 = No Content
   });
-
-  // 3. setup cookies
-  const secret = Math.random().toString(36).substring(7);
-  app.use(cookieParser(secret));
 
   // 4. rate limiting
   const limiter = rateLimit({

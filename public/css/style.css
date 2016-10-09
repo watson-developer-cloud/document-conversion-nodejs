@@ -1,3 +1,7 @@
+.jumbotron--header {
+  margin-top: 0rem;
+}
+
 .upload--explanation {font-size: .8em; color: #777677;}
 .error {color: #a53725; textAlign: center;}
 /*.radio-group { display: flex; justify-content: space-between; align-items: end;}*/
