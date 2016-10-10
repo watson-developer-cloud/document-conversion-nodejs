@@ -28,6 +28,7 @@ export default function(props) {
                 {props.children}
                 </div>
             <script type="text/javascript" src="js/bundle.js"></script>
+            <script type="text/javascript" src="js/vendors/google-analytics.js" defer async></script>
             </body>
     </html>
     );
