@@ -9,3 +9,4 @@ applications:
   command: npm start
   path: .
   memory: 512M
+  disk_quota: 2G # default is 1G, but something in the dependencies goes over this, at least on npm 2.x
