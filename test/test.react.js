@@ -13,18 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const assert = require('assert');
+const React = require('react');
+const ReactDOMServer = require('react-dom/server');
+require('babel-register');
 
-
-const path = require('path');
-// load default variables for testing
-require('dotenv').config({ path: path.join(__dirname, '../.env.example') });
-
-
-const app = require('../app');
-const request = require('supertest');
-
-describe('express', () => {
-  it('load home page when GET /', (done) => {
-    request(app).get('/').expect(200, done);
+describe('react', () => {
+  it('should render some html', () => {
+    const index = require('../views/index.jsx').default;
+    const element = React.createElement(index, null);
+    const result = ReactDOMServer.renderToString(element);
+    assert(result);
+    assert.equal(result.substr(0, 5), '<html');
   });
 });

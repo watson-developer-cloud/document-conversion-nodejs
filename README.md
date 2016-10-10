@@ -77,6 +77,25 @@ Give it a try! Click the button below to fork into IBM DevOps Services and deplo
 5.  `npm start`
 6. Go to `http://localhost:3000`
 
+### Directory structure
+
+```none
+.
+├── app.js                      // express routes
+├── config                      // express configuration
+│   ├── error-handler.js
+│   ├── express.js
+│   └── security.js
+├── manifest.yml
+├── package.json
+├── public                      // static resources
+├── server.js                   // entry point
+├── test                        // unit tests
+├── training
+│   └── weather_data_train.csv  // training file
+└── views                       // react components
+```
+
 
 ## Troubleshooting
 
@@ -99,4 +118,4 @@ To troubleshoot your Bluemix app the main useful source of information are the l
 
 [service_url]: http://www.ibm.com/smarterplanet/us/en/ibmwatson/developercloud/document-conversion.html
 [cloud_foundry]: https://github.com/cloudfoundry/cli
-[sign_up]: https://apps.admin.ibmcloud.com/manage/trial/bluemix.html?cm_mmc=WatsonDeveloperCloud-_-LandingSiteGetStarted-_-x-_-CreateAnAccountOnBluemixCLI
+[sign_up]: https://console.ng.bluemix.net/registration/

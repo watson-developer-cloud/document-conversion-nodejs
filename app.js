@@ -14,35 +14,37 @@
  * limitations under the License.
  */
 
-'use strict';
-require('dotenv').load({silent: true});
-var express = require('express');
-var app = express();
-var DocumentConversionV1 = require('watson-developer-cloud/document-conversion/v1');
-var fs = require('fs');
-var path = require('path');
+
+require('dotenv').load({ silent: true });
+const express = require('express');
+const app = express();
+const DocumentConversionV1 = require('watson-developer-cloud/document-conversion/v1');
+const fs = require('fs');
+const path = require('path');
+const multer = require('multer');
+
 
 // Bootstrap application settings
 require('./config/express')(app);
 
 
-var documentConversion = new DocumentConversionV1({
+const documentConversion = new DocumentConversionV1({
   // If unspecified here, the DOCUMENT_CONVERSION_USERNAME and DOCUMENT_CONVERSION_PASSWORD env properties will be checked
   // After that, the SDK will fall back to the bluemix-provided VCAP_SERVICES environment property
   // username: '<username>',
   // password: '<password>',
-  version_date: '2015-12-01'
+  version_date: '2015-12-01',
 });
 
-var types = {
-  'ANSWER_UNITS': '.json',
-  'NORMALIZED_HTML': '.html',
-  'NORMALIZED_TEXT': '.txt'
+const types = {
+  ANSWER_UNITS: '.json',
+  NORMALIZED_HTML: '.html',
+  NORMALIZED_TEXT: '.txt',
 };
 
-var samples = ['sampleHTML.html', 'samplePDF.pdf', 'sampleWORD.docx'];
-var uploadFolder = path.join(__dirname, 'uploads/');
-var sampleFolder = path.join(__dirname, 'public/data/');
+const samples = ['sampleHTML.html', 'samplePDF.pdf', 'sampleWORD.docx'];
+const uploadFolder = path.join(__dirname, 'uploads/');
+const sampleFolder = path.join(__dirname, 'public/data/');
 
 /**
  * Returns the file path to a previously uploaded file or a sample file
@@ -52,52 +54,62 @@ var sampleFolder = path.join(__dirname, 'public/data/');
 function getFilePath(filename) {
   if (samples.indexOf(filename) !== -1) {
     return sampleFolder + filename;
-  } else {
-    console.log(uploadFolder);
-    if (fs.readdirSync(uploadFolder).indexOf(filename) !== -1) {
-      return uploadFolder + filename;
-    }
-    return null;
   }
+  if (fs.readdirSync(uploadFolder).indexOf(filename) !== -1) {
+    return uploadFolder + filename;
+  }
+  return null;
 }
 
-app.get('/', function(req, res) {
+app.get('/', (req, res) => {
   res.render('index');
+});
+
+// Setup the upload mechanism
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, cb) {
+      cb(null, './uploads/');
+    },
+    filename(req, file, cb) {
+      cb(null, `${Date.now()}-${file.originalname}`);
+    },
+  }),
 });
 
 /*
  * Uploads a file
  */
-app.post('/files', app.upload.single('document'), function(req, res, next) {
+app.post('/files', upload.single('document'), (req, res, next) => {
   if (!req.file && !req.file.path) {
     return next({
       error: 'Missing required parameter: file',
-      code: 400
+      code: 400,
     });
   }
   res.json({
-    id: req.file.filename
+    id: req.file.filename,
   });
 });
 
 /*
  * Converts a document
  */
-app.get('/api/convert', function(req, res, next) {
-  var file = getFilePath(req.query.document_id);
-  var params = {
+app.get('/api/convert', (req, res, next) => {
+  const file = getFilePath(req.query.document_id);
+  const params = {
     conversion_target: req.query.conversion_target,
-    file: file ? fs.createReadStream(file) : null
+    file: file ? fs.createReadStream(file) : null,
   };
 
-  documentConversion.convert(params, function(err, data) {
+  documentConversion.convert(params, (err, data) => {
     if (err) {
       return next(err);
     }
-    var type = types[req.query.conversion_target];
+    const type = types[req.query.conversion_target];
     res.type(type);
     if (req.query.download) {
-      res.setHeader('content-disposition', 'attachment; filename=output-' + Date.now() + '.' + type);
+      res.setHeader('content-disposition', `attachment; filename=output-${Date.now()}.${type}`);
     }
     res.send(data);
   });
@@ -106,14 +118,9 @@ app.get('/api/convert', function(req, res, next) {
 /*
  * Returns an uploaded file from the service
  */
-app.get('/files/:id', function(req, res) {
-  var file = getFilePath(req.params.id);
-  fs.createReadStream(file).on('response', function(response) {
-    if (req.query.download) {
-      response.headers['content-disposition'] = 'attachment; filename=' + req.params.id;
-    }
-  })
-  .pipe(res);
+app.get('/files/:id', (req, res) => {
+  const file = getFilePath(req.params.id);
+  res.sendFile(file);
 });
 
 // error-handler settings

@@ -3,3 +3,5 @@ uploads/*
 !uploads/README.md
 coverage
 .env
+*.log
+.DS_Store
