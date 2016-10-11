@@ -17,7 +17,6 @@
 
 // Module dependencies
 const express = require('express');
-const bodyParser = require('body-parser');
 const findRemoveSync = require('find-remove');
 const path = require('path');
 const morgan = require('morgan');
@@ -49,8 +48,6 @@ module.exports = function (app) {
   app.get('/js/bundle.js', browserifyier);
 
   // Configure Express
-  app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
-  app.use(bodyParser.json({ limit: '1mb' }));
   app.use(express.static(path.join(__dirname, '..', 'public')));
   app.use(express.static(path.join(__dirname, '..', 'node_modules/watson-react-components/dist/')));
   app.use(morgan('dev'));

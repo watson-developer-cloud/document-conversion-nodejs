@@ -80,7 +80,7 @@ const upload = multer({
 /*
  * Uploads a file
  */
-app.post('/files', upload.single('document'), (req, res, next) => {
+app.post('/files', upload.single('document'), (req, res) => {
   if (!req.file && !req.file.path) {
     return next({
       error: 'Missing required parameter: file',

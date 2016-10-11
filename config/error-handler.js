@@ -28,7 +28,8 @@ module.exports = function (app) {
   // error handler
   app.use((err, req, res, next) => {
     const error = {
-      code: err.code || 500,
+      // node.js will throw if the http status code is invalid
+      code: typeof err.code === 'number' && 100<=err.code<=999 ? err.code : 500,
       error: err.error || err.message,
     };
     res.status(error.code).json(error);
