@@ -52,6 +52,7 @@ module.exports = function (app) {
   app.use(express.static(path.join(__dirname, '..', 'node_modules/watson-react-components/dist/')));
   app.use(morgan('dev'));
 
+  // todo: drop the uploads dir and use fs.mkdtemp() instead
   // Remove files older than 1 hour every hour.
   setInterval(() => {
     findRemoveSync(path.join(__dirname, '..', 'uploads'), { age: { seconds: 3600 } });
