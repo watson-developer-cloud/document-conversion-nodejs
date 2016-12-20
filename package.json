@@ -61,6 +61,7 @@
     "eslint-plugin-react": "^6.3.0",
     "istanbul": "^0.4.2",
     "mocha": "^3.2.0",
+    "phantomjs-prebuilt": "^2.1.14",
     "supertest": "^2.0.0"
   },
   "babel": {

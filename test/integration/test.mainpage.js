@@ -49,7 +49,9 @@ casper.test.begin('Document Conversion Demo', 31, function suite(test) {
     });
 
     casper.then(function () {
-      test.assertExists('label[for="file-chooser-input"]', 'Choose your file - button is found');
+      casper.waitForSelector('label[for="file-chooser-input"]', function () {
+        test.assertExists('label[for="file-chooser-input"]', 'Choose your file - button is found');
+      });
     });
   }
 
