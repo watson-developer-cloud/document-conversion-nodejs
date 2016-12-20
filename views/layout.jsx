@@ -19,8 +19,9 @@ export default function(props) {
                     serviceName="Document Conversion"
                     repository="https://github.com/watson-developer-cloud/document-conversion-nodejs"
                     documentation="http://www.ibm.com/watson/developercloud/doc/document-conversion"
-                    apiReference="http://www.ibm.com/watson/developercloud/document-conversion/api/v1/"
+                    apiReference="http://www.ibm.com/watson/developercloud/document-conversion/api/"
                     version="GA"
+                    startInBluemix="https://console.ng.bluemix.net/registration/?target=/catalog/services/document-conversion/"
                     serviceIcon="/images/document-conversion.svg"
                     description="The Document Conversion service transforms HTML, PDF, and Microsoft™ Word documents into normalized HTML, plain text, or sets of Answer units. The Answer units can be run through a utility to convert it to the Solr JSON file type needed to train the Retrieve and Rank service."
                 />
