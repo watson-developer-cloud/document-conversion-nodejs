@@ -55,6 +55,6 @@ module.exports = function (app) {
   // todo: drop the uploads dir and use fs.mkdtemp() instead
   // Remove files older than 1 hour every hour.
   setInterval(() => {
-    findRemoveSync(path.join(__dirname, '..', 'uploads'), { age: { seconds: 3600 } });
-  }, 3600000);
+    findRemoveSync(path.join(__dirname, '..', 'uploads'), { files: '*.*', age: { seconds: 3600 } });
+  }, 600000); // every 10 minutes
 };
