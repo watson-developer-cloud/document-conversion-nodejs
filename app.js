@@ -62,7 +62,9 @@ function getFilePath(filename) {
 }
 
 app.get('/', (req, res) => {
-  res.render('index');
+  res.render('index', {
+    BLUEMIX_ANALYTICS: process.env.BLUEMIX_ANALYTICS,
+  });
 });
 
 // Setup the upload mechanism
