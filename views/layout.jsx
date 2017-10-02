@@ -32,7 +32,7 @@ function Layout(props) {
           documentation="http://www.ibm.com/watson/developercloud/doc/document-conversion"
           apiReference="http://www.ibm.com/watson/developercloud/document-conversion/api/"
           version="GA"
-          startInBluemix="https://console.ng.bluemix.net/registration/?target=/catalog/services/document-conversion/"
+          startInBluemix="https://console.bluemix.net/registration?target=%2Fdeveloper%2Fwatson%2Fcreate-project%3Fservices%3Ddocument_conversion%26action%3Dcreate%26cm_mmc%3DOSocial_Tumblr-_-Watson%2BCore_Watson%2BCore%2B-%2BPlatform-_-WW_WW-_-wdc-ref%26cm_mmc%3DOSocial_Tumblr-_-Watson%2BCore_Watson%2BCore%2B-%2BPlatform-_-WW_WW-_-wdc-ref%26cm_mmca1%3D000000OF%26cm_mmca2%3D10000409"
           serviceIcon="/images/document-conversion.svg"
           description="The Document Conversion service transforms HTML, PDF, and Microsoft™ Word documents into normalized HTML, plain text, or sets of Answer units. The Answer units can be run through a utility to convert it to the Solr JSON file type needed to train the Retrieve and Rank service." // eslint-disable-line
         />
