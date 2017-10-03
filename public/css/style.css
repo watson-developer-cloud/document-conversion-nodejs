@@ -1,5 +1,6 @@
 .upload--explanation {font-size: .8em; color: #777677;}
 .error {color: #a53725; textAlign: center;}
+.deprecation--notice {color: red; font-weight: bold;}
 /*.radio-group { display: flex; justify-content: space-between; align-items: end;}*/
 .radio-group > div { display: inline-block; margin-right: 2em; }
 .radio-group img { height: 100%; padding-right: 1em; height: 3em; vertical-align: middle; }
