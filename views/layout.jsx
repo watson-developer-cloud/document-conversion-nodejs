@@ -27,24 +27,10 @@ function Layout(props) {
           mainBreadcrumbs="Document Conversion"
           mainBreadcrumbsUrl="http://www.ibm.com/watson/developercloud/document-conversion.html"
         />
-        <div style={{
-            position: 'absolute',
-              bottom: '50%',
-                left: 0,
-                  right: 0,
-                    margin: 'auto',
-                      alignItems: 'center',
-                        display: 'flex',
-                          paddingLeft: '15px',
-                            paddingRight: '15px',
-                              flexDirection: 'column',}}>
-          <h3 style={{color: '#511687', font: 'bold'}}>Document Conversion is no longer available.</h3>
+        <div className="deprecation--container">
+          <h3>Document Conversion is no longer available.</h3>
           <p>Document Conversion is deprecated as a stand-alone service. Learn more about the <a href="https://ibm.biz/rnr_dcs_announcement">announcement</a> and <a href="https://ibm.biz/rnr_dcs_migration">migration path</a> to switch to Watson Discovery.</p>
 
-        </div>
-
-        <div style={{position: 'absolute', right: 0, bottom: 0, left: 0}}>
-          <Footer />
         </div>
         <div id="root">
           {props.children}
