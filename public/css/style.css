@@ -1,5 +1,7 @@
 .upload--explanation {font-size: .8em; color: #777677;}
-.error {color: #a53725; textAlign: center;}
+.error {color: #a53725; text-align: center;}
+.deprecation--container { position: absolute; bottom: 50%; left: 0; right: 0; margin: auto; align-items: center; display: flex; padding-left: 15px; padding-right: 15px; flex-direction: column; }
+.deprecation--container > h3 { color: #511687; font-weight: bold; }
 /*.radio-group { display: flex; justify-content: space-between; align-items: end;}*/
 .radio-group > div { display: inline-block; margin-right: 2em; }
 .radio-group img { height: 100%; padding-right: 1em; height: 3em; vertical-align: middle; }
