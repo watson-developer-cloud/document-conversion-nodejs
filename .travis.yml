@@ -13,7 +13,7 @@ before_deploy: npm install -g https://github.com/andresfvilla/bx-blue-green
 deploy:
   provider: script
   script:
-    - bx-blue-green-travis
+  - bx-blue-green-travis
   on:
     repo: watson-developer-cloud/document-conversion-nodejs
     branch: master
